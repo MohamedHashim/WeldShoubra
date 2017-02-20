@@ -7,10 +7,55 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.hashim.mohamed.weldshoubra.MainActivity">
+    tools:context="com.hashim.mohamed.weldshoubra.MainActivity"
+    android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <Button
+        android:id="@+id/API_button"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_border"
+        android:gravity="center"
+        android:text="API"
+        android:textAlignment="gravity"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/ASME_button"
+        style="?android:textAppearanceSmall"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/API_button"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_border"
+        android:gravity="center"
+        android:text="ASME"
+        android:textAlignment="gravity"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/AWS_button"
+        style="?android:textAppearanceSmall"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/ASME_button"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/login_border"
+        android:gravity="center"
+        android:text="AWS"
+        android:textAlignment="gravity"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
 </RelativeLayout>
