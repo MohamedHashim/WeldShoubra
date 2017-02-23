@@ -1,19 +1,17 @@
 package com.hashim.mohamed.weldshoubra;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+public class AboutUsActivity extends AppCompatActivity {
 
-    Button API_btn, ASME_btn, AWS_btn;
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -22,10 +20,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        API_btn = (Button) findViewById(R.id.API_button);
-        ASME_btn = (Button) findViewById(R.id.ASME_button);
-        AWS_btn = (Button) findViewById(R.id.AWS_button);
+        setContentView(R.layout.activity_about_us);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
@@ -33,30 +28,6 @@ public class MainActivity extends AppCompatActivity {
         View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
         setSupportActionBar(toolbar);
         setupDrawerContent(nvDrawer);
-
-        API_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ParametersActivity.class);
-                startActivity(intent);
-
-            }
-        });
-        ASME_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ParametersActivity.class);
-                startActivity(intent);
-
-            }
-        });
-        AWS_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ParametersActivity.class);
-                startActivity(intent);
-            }
-        });
     }
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
@@ -85,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.nav_third_fragment:
-                Intent logout = new Intent(MainActivity.this, MainActivity.class);
+                Intent logout = new Intent(AboutUsActivity.this, MainActivity.class);
                 logout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(logout);
                 finish();
@@ -97,3 +68,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+

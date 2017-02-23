@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/group" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Weld Shoubra 2017"
+                android:textColor="@color/green"
+                android:textSize="30dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Youmna Ashraf"
+                    android:textColor="@color/black"
+                    android:textSize="26dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mohammed Faheem"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="26dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ibrahim Reda"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="26dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mahmoud Alashery"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="26dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mahmoud Talaat"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="26dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mostafa Eltokhey"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="26dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Noor Hesham"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="26dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mahmoud Elnggar"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="26dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
