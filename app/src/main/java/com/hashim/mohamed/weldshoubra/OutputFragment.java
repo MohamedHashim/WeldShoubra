@@ -5,42 +5,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 /**
  * Created by mohamed on 17/02/17.
  */
 public class OutputFragment extends Fragment {
 
-    private String title;
-    private int page;
+    ImageView out_img;
 
-    // newInstance constructor for creating fragment with arguments
-    public static OutputFragment newInstance(int page, String title) {
-        OutputFragment fragmentFirst = new OutputFragment();
-        Bundle args = new Bundle();
-        args.putInt("someInt", page);
-        args.putString("someTitle", title);
-        fragmentFirst.setArguments(args);
-        return fragmentFirst;
-    }
-
-    // Store instance variables based on arguments passed
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        page = getArguments().getInt("someInt", 0);
-        title = getArguments().getString("someTitle");
-    }
-
-    // Inflate the view for the fragment based on layout XML
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.output_fragment, container, false);
-        TextView tvLabel = (TextView) view.findViewById(R.id.OutLabel);
-        tvLabel.setText(page + " -- " + title);
-        return view;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = inflater.inflate(R.layout.output_fragment, container, false);
+        out_img = (ImageView) root.findViewById(R.id.out_img);
+        return root;
     }
 }
-
