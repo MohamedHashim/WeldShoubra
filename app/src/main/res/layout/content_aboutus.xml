@@ -15,7 +15,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:src="@drawable/group" />
 
             <TextView
@@ -24,6 +24,7 @@
                 android:gravity="center"
                 android:text="Weld Shoubra 2017"
                 android:textColor="@color/green"
+                android:paddingTop="20dp"
                 android:textSize="30dp" />
 
             <LinearLayout
@@ -31,6 +32,7 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="20dp"
                 android:paddingTop="20dp"
+                android:paddingBottom="30dp"
                 android:orientation="vertical">
 
                 <TextView

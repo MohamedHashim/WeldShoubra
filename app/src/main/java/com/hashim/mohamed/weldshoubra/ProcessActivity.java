@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class ProcessActivity extends AppCompatActivity {
     Button btn1, btn2, btn3, btn4, btn5, btn6;
@@ -17,6 +19,8 @@ public class ProcessActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+    ImageView back_btn;
+    TextView toolbartxt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +32,15 @@ public class ProcessActivity extends AppCompatActivity {
         View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
         setSupportActionBar(toolbar);
         setupDrawerContent(nvDrawer);
+        back_btn = (ImageView) findViewById(R.id.back_btn);
+        toolbartxt = (TextView) findViewById(R.id.toolbartxt);
+        toolbartxt.setText("Processes");
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         btn1 = (Button) findViewById(R.id.btn1);
         btn2 = (Button) findViewById(R.id.btn2);
         btn3 = (Button) findViewById(R.id.btn3);

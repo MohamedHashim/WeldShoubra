@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
@@ -30,6 +31,9 @@ public class ParametersActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+    ImageView back_btn;
+    TextView toolbartxt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,15 @@ public class ParametersActivity extends AppCompatActivity {
         thickness_spinner = (SearchableSpinner) findViewById(R.id.thickness_spinner);
         grove = (TextView) findViewById(R.id.grove);
         next = (Button) findViewById(R.id.next);
+        back_btn = (ImageView) findViewById(R.id.back_btn);
+        toolbartxt = (TextView) findViewById(R.id.toolbartxt);
+        toolbartxt.setText("Welding Parameters");
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         List<String> material1;
         material1 = new ArrayList<String>();
         material1.add("Steel");
@@ -108,11 +121,13 @@ public class ParametersActivity extends AppCompatActivity {
         });
 
     }
+
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
         // and will not render the hamburger icon without it.
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
     }
+
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {

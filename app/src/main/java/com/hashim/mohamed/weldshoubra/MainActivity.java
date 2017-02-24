@@ -3,6 +3,7 @@ package com.hashim.mohamed.weldshoubra;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,14 +11,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     Button API_btn, ASME_btn, AWS_btn;
-    private DrawerLayout mDrawer;
+    public DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+    ImageView searchFlag;
+    TextView toolbartxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +36,20 @@ public class MainActivity extends AppCompatActivity {
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         drawerToggle = setupDrawerToggle();
         View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
+        mDrawer.addDrawerListener(drawerToggle);
         setSupportActionBar(toolbar);
         setupDrawerContent(nvDrawer);
+        searchFlag = (ImageView) findViewById(R.id.back_btn);
+        toolbartxt = (TextView) findViewById(R.id.toolbartxt);
+        toolbartxt.setText("Codes");
+        searchFlag.setImageResource(R.drawable.menue);
+        searchFlag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDrawer.openDrawer(GravityCompat.START);
+
+            }
+        });
 
         API_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,11 +75,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
         // and will not render the hamburger icon without it.
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
     }
+
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -73,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     public void selectDrawerItem(MenuItem menuItem) {
         switch (menuItem.getItemId()) {

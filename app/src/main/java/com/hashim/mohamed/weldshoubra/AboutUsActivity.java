@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class AboutUsActivity extends AppCompatActivity {
 
@@ -16,7 +18,8 @@ public class AboutUsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
-
+    ImageView back_btn;
+    TextView toolbartxt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +31,16 @@ public class AboutUsActivity extends AppCompatActivity {
         View headerLayout = nvDrawer.inflateHeaderView(R.layout.nav_header);
         setSupportActionBar(toolbar);
         setupDrawerContent(nvDrawer);
+        back_btn = (ImageView) findViewById(R.id.back_btn);
+        toolbartxt = (TextView) findViewById(R.id.toolbartxt);
+        toolbartxt.setText("About Us");
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
     }
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
