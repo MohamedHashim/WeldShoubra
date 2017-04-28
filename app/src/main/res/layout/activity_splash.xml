@@ -22,7 +22,7 @@
         android:layout_below="@+id/imgLogo"
         android:layout_marginTop="107dp"
         android:gravity="center_horizontal"
-        android:text="Weld Shoubra 2017"
+        android:text="@string/name"
         android:textColor="@color/green"
         android:textSize="28dp"
         android:textStyle="bold|italic" />

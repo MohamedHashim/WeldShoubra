@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button API_btn, ASME_btn, AWS_btn;
+    Button AWS_btn;
     public DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        API_btn = (Button) findViewById(R.id.API_button);
-        ASME_btn = (Button) findViewById(R.id.ASME_button);
         AWS_btn = (Button) findViewById(R.id.AWS_button);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -51,22 +49,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        API_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ParametersActivity.class);
-                startActivity(intent);
-
-            }
-        });
-        ASME_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ParametersActivity.class);
-                startActivity(intent);
-
-            }
-        });
         AWS_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

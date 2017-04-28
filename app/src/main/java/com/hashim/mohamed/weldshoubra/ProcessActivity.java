@@ -7,20 +7,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ProcessActivity extends AppCompatActivity {
-    Button btn1, btn2, btn3, btn4, btn5, btn6;
+    Button btn1, btn2, btn3, btn4, btn5;
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     ImageView back_btn;
     TextView toolbartxt;
+    LinearLayout smaw, gmaw, gtaw, fcaw, saw;
+    Boolean smaw_bool,gmaw_bool,gtaw_bool,fcaw_bool,saw_bool;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,18 +41,50 @@ public class ProcessActivity extends AppCompatActivity {
         back_btn = (ImageView) findViewById(R.id.back_btn);
         toolbartxt = (TextView) findViewById(R.id.toolbartxt);
         toolbartxt.setText("Processes");
-        back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
         btn1 = (Button) findViewById(R.id.btn1);
         btn2 = (Button) findViewById(R.id.btn2);
         btn3 = (Button) findViewById(R.id.btn3);
         btn4 = (Button) findViewById(R.id.btn4);
         btn5 = (Button) findViewById(R.id.btn5);
-        btn6 = (Button) findViewById(R.id.btn6);
+        smaw = (LinearLayout) findViewById(R.id.smaw);
+        gmaw = (LinearLayout) findViewById(R.id.gmaw);
+        gtaw = (LinearLayout) findViewById(R.id.gtaw);
+        fcaw = (LinearLayout) findViewById(R.id.fcaw);
+        saw = (LinearLayout) findViewById(R.id.saw);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        smaw.setVisibility(View.GONE);
+        gmaw.setVisibility(View.GONE);
+        gtaw.setVisibility(View.GONE);
+        fcaw.setVisibility(View.GONE);
+        saw.setVisibility(View.GONE);
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        smaw_bool =bundle.getBoolean("smaw");
+        gmaw_bool =bundle.getBoolean("gmaw");
+        gtaw_bool =bundle.getBoolean("gtaw");
+        fcaw_bool =bundle.getBoolean("fcaw");
+        saw_bool =bundle.getBoolean("saw");
+
+        Log.d("bools",saw_bool+"\t"+gmaw_bool+"\t"+gtaw_bool+"\t"+fcaw_bool+"\t"+smaw_bool);
+
+        if(smaw_bool)
+            smaw.setVisibility(View.VISIBLE);
+        if(gmaw_bool)
+            gmaw.setVisibility(View.VISIBLE);
+        if(gtaw_bool)
+            gtaw.setVisibility(View.VISIBLE);
+        if(fcaw_bool)
+            fcaw.setVisibility(View.VISIBLE);
+        if(saw_bool)
+            saw.setVisibility(View.VISIBLE);
+
+        if(!smaw_bool&&!gmaw_bool&&!gtaw_bool&&!fcaw_bool&&!saw_bool)
+            Toast.makeText(getApplicationContext(),"There is no process to select",Toast.LENGTH_LONG).show();
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,14 +121,6 @@ public class ProcessActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        btn6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProcessActivity.this, ResultActivity.class);
-                startActivity(intent);
-            }
-        });
-
     }
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
@@ -130,4 +160,8 @@ public class ProcessActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

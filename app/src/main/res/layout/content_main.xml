@@ -10,45 +10,17 @@
     tools:context="com.hashim.mohamed.weldshoubra.MainActivity">
 
     <Button
-        android:id="@+id/API_button"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/login_border"
-        android:gravity="center"
-        android:text="API"
-        android:textAlignment="gravity"
-        android:textColor="@color/white"
-        android:textSize="25dp" />
-
-    <Button
-        android:id="@+id/ASME_button"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/API_button"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/login_border"
-        android:gravity="center"
-        android:text="ASME"
-        android:textAlignment="gravity"
-        android:textColor="@color/white"
-        android:textSize="25dp" />
-
-    <Button
         android:id="@+id/AWS_button"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/ASME_button"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:background="@drawable/login_border"
         android:gravity="center"
-        android:text="AWS"
+        android:text="AWS D1.1 Code\nfor steel structure"
+        android:padding="5dp"
         android:textAlignment="gravity"
         android:textColor="@color/white"
-        android:textSize="25dp" />
+        android:textSize="23dp" />
 </RelativeLayout>
