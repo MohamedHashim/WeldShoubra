@@ -87,16 +87,20 @@ public class ParametersActivity extends AppCompatActivity {
                     else {
                         groove_txt.setVisibility(View.VISIBLE);
                         thick_num = Double.parseDouble(thickness.getText().toString());
-                        if (thick_num >= 0 && thick_num <= 4.6) {
+                        if (thick_num >= 3 && thick_num <= 6.25) {
                             groove.setText(groove_types[0]);
-                        } else if (thick_num >= 4.7 && thick_num <= 9.5) {
+                        } else if (thick_num >= 4.7 && thick_num <= 12) {
                             groove.setText(groove_types[1]);
-                        } else if (thick_num >= 9.6 && thick_num <= 12) {
+                        } else if (thick_num > 12&&thick_num<50) {
                             groove.setText(groove_types[2]);
-                        } else if (thick_num >= 12.1 && thick_num <= 19.5) {
+                        } else if (thick_num >= 6.25 && thick_num <= 19) {
                             groove.setText(groove_types[3]);
-                        } else if (thick_num > 19.5) {
+                        } else if (thick_num > 19&&thick_num<50) {
                             groove.setText(groove_types[4]);
+                        }
+                        else{
+                            thickness.setError("Thickness interval from 3 to 50 mm");
+
                         }
                     }
                 }
