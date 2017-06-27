@@ -1,6 +1,7 @@
 package com.hashim.mohamed.weldshoubra;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,19 +33,20 @@ import java.util.List;
  */
 public class ParametersActivity extends AppCompatActivity {
 
-    SearchableSpinner material1_spinner, material2_spinner, position_spinner,area_condition_spinner, welding_method_spinner;
+    SearchableSpinner material1_spinner, position_spinner, area_condition_spinner, welding_method_spinner;
     Button next;
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     ImageView back_btn;
-    TextView toolbartxt, groove,groove_txt;
+    TextView toolbartxt, groove_txt, material2;
     private EditText thickness;
     private String groove_types[] = {"Square joint", "Single-bevel joint", "Double-bevel joint", "Single-V joint", "Double-V joint"};
-    String thickness_txt;
     int position_index, area_condition_index, welding_method_index;
     Double thick_num;
+    private CheckBox Square_joint_CheckBox, Single_bevel_joint_CheckBox, Double_bevel_joint_CheckBox, Single_V_joint_CheckBox, Double_V_joint_CheckBox;
+    boolean Square_joint, Single_bevel_joint, Double_bevel_joint, Single_V_joint, Double_V_joint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,16 +61,20 @@ public class ParametersActivity extends AppCompatActivity {
         setupDrawerContent(nvDrawer);
 
         material1_spinner = (SearchableSpinner) findViewById(R.id.material1_spinner);
-        material2_spinner = (SearchableSpinner) findViewById(R.id.material2_spinner);
+        material2 = (TextView) findViewById(R.id.material2);
         position_spinner = (SearchableSpinner) findViewById(R.id.position_spinner);
         welding_method_spinner = (SearchableSpinner) findViewById(R.id.welding_method);
         area_condition_spinner = (SearchableSpinner) findViewById(R.id.area_condition);
 
 
-        groove = (TextView) findViewById(R.id.groove);
-        groove_txt= (TextView) findViewById(R.id.groove_txt);
+        groove_txt = (TextView) findViewById(R.id.groove_txt);
         next = (Button) findViewById(R.id.next);
         thickness = (EditText) findViewById(R.id.thickness);
+        Square_joint_CheckBox = (CheckBox) findViewById(R.id.Square_joint_check_box);
+        Single_bevel_joint_CheckBox = (CheckBox) findViewById(R.id.Single_bevel_joint_check_box);
+        Double_bevel_joint_CheckBox = (CheckBox) findViewById(R.id.Double_bevel_joint_check_box);
+        Single_V_joint_CheckBox = (CheckBox) findViewById(R.id.Single_V_joint_check_box);
+        Double_V_joint_CheckBox = (CheckBox) findViewById(R.id.Double_V_joint_check_box);
         back_btn = (ImageView) findViewById(R.id.back_btn);
         toolbartxt = (TextView) findViewById(R.id.toolbartxt);
         toolbartxt.setText("Welding Parameters");
@@ -77,37 +84,47 @@ public class ParametersActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+        final SharedPreferences sharedPref = getSharedPreferences("parameters", getApplicationContext().MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPref.edit();
 
         thickness.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Single_V_joint_CheckBox.setVisibility(View.GONE);
+                Single_bevel_joint_CheckBox.setVisibility(View.GONE);
+                Square_joint_CheckBox.setVisibility(View.GONE);
+                Double_bevel_joint_CheckBox.setVisibility(View.GONE);
+                Double_V_joint_CheckBox.setVisibility(View.GONE);
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     if (thickness.getText().toString().isEmpty())
                         thickness.setError("this field is empty");
                     else {
                         groove_txt.setVisibility(View.VISIBLE);
                         thick_num = Double.parseDouble(thickness.getText().toString());
+                        editor.putString("thickness", thickness.getText().toString());
                         if (thick_num >= 3 && thick_num <= 6.25) {
-                            groove.setText(groove_types[0]);
-                        } else if (thick_num >= 4.7 && thick_num <= 12) {
-                            groove.setText(groove_types[1]);
-                        } else if (thick_num > 12&&thick_num<50) {
-                            groove.setText(groove_types[2]);
-                        } else if (thick_num >= 6.25 && thick_num <= 19) {
-                            groove.setText(groove_types[3]);
-                        } else if (thick_num > 19&&thick_num<50) {
-                            groove.setText(groove_types[4]);
+                            Square_joint_CheckBox.setVisibility(View.VISIBLE);
                         }
-                        else{
+                        if (thick_num >= 4.7 && thick_num <= 12) {
+                            Single_bevel_joint_CheckBox.setVisibility(View.VISIBLE);
+                        }
+                        if (thick_num > 12 && thick_num < 50) {
+                            Double_bevel_joint_CheckBox.setVisibility(View.VISIBLE);
+                        }
+                        if (thick_num >= 6.25 && thick_num <= 19) {
+                            Single_V_joint_CheckBox.setVisibility(View.VISIBLE);
+                        }
+                        if (thick_num > 19 && thick_num < 50) {
+                            Double_V_joint_CheckBox.setVisibility(View.VISIBLE);
+                        }
+                        if (thick_num < 3 || thick_num > 50) {
                             thickness.setError("Thickness interval from 3 to 50 mm");
-
                         }
                     }
                 }
                 return false;
             }
         });
-        List<String> material1;
+        final List<String> material1;
         material1 = new ArrayList<String>();
         material1.add("ST37");
         material1.add("ST44");
@@ -115,24 +132,26 @@ public class ParametersActivity extends AppCompatActivity {
         ArrayAdapter<String> material1_Adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, material1);
         material1_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         material1_spinner.setAdapter(material1_Adapter);
+        material1_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                material2.setText(material1.get(position));
+                editor.putString("material", material1.get(position));
+            }
 
-        List<String> material2;
-        material2 = new ArrayList<String>();
-        material2.add("ST37");
-        material2.add("ST44");
-        material2.add("ST52");
-        ArrayAdapter<String> material2_Adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, material2);
-        material2_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        material2_spinner.setAdapter(material2_Adapter);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
-        List<String> position;
-        position = new ArrayList<String>();
-        position.add("1G - Flat Groove");
-        position.add("2G - Horizontal Groove");
-        position.add("3G - Vertical Uphill");
-        position.add("3G - vertical Downhill");
-        position.add("4G - Overhead Groove");
-        ArrayAdapter<String> position_Adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, position);
+        final List<String> Position;
+        Position = new ArrayList<String>();
+        Position.add("1G - Flat Groove");
+        Position.add("2G - Horizontal Groove");
+        Position.add("3G - Vertical Uphill");
+        Position.add("3G - vertical Downhill");
+        Position.add("4G - Overhead Groove");
+        ArrayAdapter<String> position_Adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_item, Position);
         position_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         position_spinner.setAdapter(position_Adapter);
 
@@ -140,6 +159,8 @@ public class ParametersActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 position_index = position;
+                editor.putString("position", Position.get(position));
+
             }
 
             @Override
@@ -148,7 +169,7 @@ public class ParametersActivity extends AppCompatActivity {
             }
         });
 
-        List<String> area_condition;
+        final List<String> area_condition;
         area_condition = new ArrayList<String>();
         area_condition.add("Open air");
         area_condition.add("Closed air");
@@ -160,16 +181,16 @@ public class ParametersActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 area_condition_index = position;
+                editor.putString("area_condition", area_condition.get(position));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 area_condition_index = -1;
-
             }
         });
 
-        List<String> welding_method;
+        final List<String> welding_method;
         welding_method = new ArrayList<String>();
         welding_method.add("Manual");
         welding_method.add("Semi-automatic");
@@ -182,6 +203,7 @@ public class ParametersActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 welding_method_index = position;
+                editor.putString("welding_method", welding_method.get(position));
             }
 
             @Override
@@ -225,28 +247,49 @@ public class ParametersActivity extends AppCompatActivity {
                     if (thick_num >= 10 && position_index == 0 && welding_method_index == 2)
                         saw = true;
                     else
-                        saw=false;
+                        saw = false;
                     if (welding_method_index == 1 && area_condition_index == 1)
                         gmaw = true;
                     else
-                        gmaw=false;
+                        gmaw = false;
                     if (welding_method_index == 0 && area_condition_index == 1)
                         gtaw = true;
                     else
-                        gtaw=false;
+                        gtaw = false;
                     if (welding_method_index == 1)
                         fcaw = true;
                     else
-                        fcaw=false;
+                        fcaw = false;
                     if (welding_method_index == 0)
                         smaw = true;
                     else
-                        smaw=false;
-
+                        smaw = false;
 
 
                     Log.d("bool data", thick_num + "\t" + position_index + "\t" + welding_method_index + "\t" + area_condition_index);
                     Log.d("bool", saw + "\t" + gmaw + "\t" + gtaw + "\t" + fcaw + "\t" + smaw);
+
+                    if (Square_joint_CheckBox.isChecked())
+                        editor.putBoolean("Square_joint_groove", true);
+                    else
+                        editor.putBoolean("Square_joint_groove", false);
+                    if (Single_bevel_joint_CheckBox.isChecked())
+                        editor.putBoolean("Single_bevel_groove", true);
+                    else
+                        editor.putBoolean("Single_bevel_groove", false);
+                    if (Double_bevel_joint_CheckBox.isChecked())
+                        editor.putBoolean("Double_bevel_groove", true);
+                    else
+                        editor.putBoolean("Double_bevel_groove", false);
+                    if (Single_V_joint_CheckBox.isChecked())
+                        editor.putBoolean("Single_V_groove", true);
+                    else
+                        editor.putBoolean("Single_V_groove", false);
+                    if (Double_V_joint_CheckBox.isChecked())
+                        editor.putBoolean("Double_V_groove", true);
+                    else
+                        editor.putBoolean("Double_V_groove", false);
+                    editor.apply();
 
                     Intent intent = new Intent(ParametersActivity.this, ProcessActivity.class);
                     intent.putExtra("saw", saw);

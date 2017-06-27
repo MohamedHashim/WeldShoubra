@@ -1,5 +1,6 @@
 package com.hashim.mohamed.weldshoubra;
 
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -7,6 +8,7 @@ import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -53,12 +55,27 @@ public class WPSActivity extends AppCompatActivity {
             Font.BOLD);
     private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
             Font.BOLD);
-    String alpha, r, f,material,thickness,groove,position,weld_progression,min_preheat_temp,type_of_gas,gas_composition,current_type,pulsing,current,voltage,wire_feed_speed,tungsten_size,pulsing_parameters;
-
+    String alpha, r, f,material,thickness,groove,position,weld_progression,min_preheat_temp,type_of_gas,gas_composition,current_type,pulsing,current,voltage,wire_feed_speed,tungsten_size,pulsing_parameters,area_condition,welding_method;
+    Boolean Square_joint_groove,Single_bevel_groove,Double_bevel_groove,Single_V_groove,Double_V_groove;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wps);
+        SharedPreferences sharedPref = getSharedPreferences("parameters", getApplicationContext().MODE_PRIVATE);
+        thickness = sharedPref.getString("thickness", "");
+        material = sharedPref.getString("material", "");
+        position = sharedPref.getString("position", "");
+        area_condition = sharedPref.getString("area_condition", "");
+        welding_method = sharedPref.getString("welding_method", "");
+        Square_joint_groove = sharedPref.getBoolean("Square_joint_groove", false);
+        Single_bevel_groove = sharedPref.getBoolean("Single_bevel_groove", false);
+        Double_bevel_groove = sharedPref.getBoolean("Double_bevel_groove", false);
+        Single_V_groove = sharedPref.getBoolean("Single_V_groove", false);
+        Double_V_groove = sharedPref.getBoolean("Double_V_groove", false);
+
+        Log.d("parameters",thickness+"\n"+material+"\n"+position+"\n"+area_condition+"\n"+welding_method+"\n"+Square_joint_groove+"\n"+Single_bevel_groove+"\n"+Double_bevel_groove+"\n"+Single_V_groove+"\n"+Double_V_groove);
+
+
         PDFView pdfView = (PDFView) findViewById(R.id.pdfView);
         File file = new File(FILE);
 
