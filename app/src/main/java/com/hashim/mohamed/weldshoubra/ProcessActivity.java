@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ProcessActivity extends AppCompatActivity {
-    Button btn1, btn2, btn3, btn4, btn5;
+    Button smaw_btn, gmaw_btn, gtaw_btn, fcaw_btn, saw_btn;
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -41,11 +41,11 @@ public class ProcessActivity extends AppCompatActivity {
         back_btn = (ImageView) findViewById(R.id.back_btn);
         toolbartxt = (TextView) findViewById(R.id.toolbartxt);
         toolbartxt.setText("Processes");
-        btn1 = (Button) findViewById(R.id.btn1);
-        btn2 = (Button) findViewById(R.id.btn2);
-        btn3 = (Button) findViewById(R.id.btn3);
-        btn4 = (Button) findViewById(R.id.btn4);
-        btn5 = (Button) findViewById(R.id.btn5);
+        smaw_btn = (Button) findViewById(R.id.smaw_btn);
+        gmaw_btn = (Button) findViewById(R.id.gmaw_btn);
+        gtaw_btn = (Button) findViewById(R.id.gtaw_btn);
+        fcaw_btn = (Button) findViewById(R.id.fcaw_btn);
+        saw_btn = (Button) findViewById(R.id.saw_btn);
         smaw = (LinearLayout) findViewById(R.id.smaw);
         gmaw = (LinearLayout) findViewById(R.id.gmaw);
         gtaw = (LinearLayout) findViewById(R.id.gtaw);
@@ -86,38 +86,43 @@ public class ProcessActivity extends AppCompatActivity {
         if(!smaw_bool&&!gmaw_bool&&!gtaw_bool&&!fcaw_bool&&!saw_bool)
             Toast.makeText(getApplicationContext(),"There is no process to select",Toast.LENGTH_LONG).show();
 
-        btn1.setOnClickListener(new View.OnClickListener() {
+        smaw_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProcessActivity.this, ResultActivity.class);
+                Intent intent = new Intent(ProcessActivity.this, WPSActivity.class);
+                intent.putExtra("process","smaw");
                 startActivity(intent);
             }
         });
-        btn2.setOnClickListener(new View.OnClickListener() {
+        gmaw_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProcessActivity.this, ResultActivity.class);
+                Intent intent = new Intent(ProcessActivity.this, WPSActivity.class);
+                intent.putExtra("process","gmaw");
                 startActivity(intent);
             }
         });
-        btn3.setOnClickListener(new View.OnClickListener() {
+        gtaw_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProcessActivity.this, ResultActivity.class);
+                Intent intent = new Intent(ProcessActivity.this, WPSActivity.class);
+                intent.putExtra("process","gtaw");
                 startActivity(intent);
             }
         });
-        btn4.setOnClickListener(new View.OnClickListener() {
+        fcaw_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProcessActivity.this, ResultActivity.class);
+                Intent intent = new Intent(ProcessActivity.this, WPSActivity.class);
+                intent.putExtra("process","fcaw");
                 startActivity(intent);
             }
         });
-        btn5.setOnClickListener(new View.OnClickListener() {
+        saw_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ProcessActivity.this, ResultActivity.class);
+                Intent intent = new Intent(ProcessActivity.this, WPSActivity.class);
+                intent.putExtra("process","saw");
                 startActivity(intent);
             }
         });

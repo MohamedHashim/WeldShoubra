@@ -55,8 +55,9 @@ public class WPSActivity extends AppCompatActivity {
             Font.BOLD);
     private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
             Font.BOLD);
-    String alpha, r, f,material,thickness,groove,position,weld_progression,min_preheat_temp,type_of_gas,gas_composition,current_type,pulsing,current,voltage,wire_feed_speed,tungsten_size,pulsing_parameters,area_condition,welding_method;
-    Boolean Square_joint_groove,Single_bevel_groove,Double_bevel_groove,Single_V_groove,Double_V_groove;
+    String alpha, r, f, material, thickness, groove, position, weld_progression, min_preheat_temp, type_of_gas, gas_composition, current_type, pulsing, current, voltage, wire_feed_speed, tungsten_size, pulsing_parameters, area_condition, welding_method, process;
+    Boolean Square_joint_groove, Single_bevel_groove, Double_bevel_groove, Single_V_groove, Double_V_groove;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +74,11 @@ public class WPSActivity extends AppCompatActivity {
         Single_V_groove = sharedPref.getBoolean("Single_V_groove", false);
         Double_V_groove = sharedPref.getBoolean("Double_V_groove", false);
 
-        Log.d("parameters",thickness+"\n"+material+"\n"+position+"\n"+area_condition+"\n"+welding_method+"\n"+Square_joint_groove+"\n"+Single_bevel_groove+"\n"+Double_bevel_groove+"\n"+Single_V_groove+"\n"+Double_V_groove);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            process = bundle.getString("process");
+        }
+        Log.d("parameters", thickness + "\n" + material + "\n" + position + "\n" + process + "\n" + area_condition + "\n" + welding_method + "\n" + Square_joint_groove + "\n" + Single_bevel_groove + "\n" + Double_bevel_groove + "\n" + Single_V_groove + "\n" + Double_V_groove);
 
 
         PDFView pdfView = (PDFView) findViewById(R.id.pdfView);
@@ -108,13 +113,13 @@ public class WPSActivity extends AppCompatActivity {
 
         printTitle(document, preface);
         printHeader(document); //TODO
-        printJoints_Design(document,alpha,r,f);
-        printBase_Metal(document,material,thickness,groove);
+        printJoints_Design(document, alpha, r, f);
+        printBase_Metal(document, material, thickness, groove);
         printFiller_Metal(document);
-        printPosition(document,position,weld_progression);
-        printPreheat(document, preface,min_preheat_temp);
-        printShielding(document,type_of_gas,gas_composition);
-        printElecterical(document,current_type,pulsing,current,voltage,wire_feed_speed,tungsten_size,pulsing_parameters);
+        printPosition(document, position, weld_progression);
+        printPreheat(document, preface, min_preheat_temp);
+        printShielding(document, type_of_gas, gas_composition);
+        printElecterical(document, current_type, pulsing, current, voltage, wire_feed_speed, tungsten_size, pulsing_parameters);
 
         // Start a new page
         document.newPage();
@@ -181,7 +186,7 @@ public class WPSActivity extends AppCompatActivity {
         document.add(linebreak1);
     }
 
-    public void printJoints_Design(Document document,String alpha,String r,String f) throws DocumentException {
+    public void printJoints_Design(Document document, String alpha, String r, String f) throws DocumentException {
         PdfPTable table_title_2 = new PdfPTable(1);
         table_title_2.setWidthPercentage(100);
         table_title_2.addCell(getCell("JOINTS DESIGN", PdfPCell.ALIGN_CENTER, greenFont, 20));
@@ -222,7 +227,7 @@ public class WPSActivity extends AppCompatActivity {
 
     }
 
-    public void printBase_Metal(Document document,String material,String thickness,String groove) throws DocumentException {
+    public void printBase_Metal(Document document, String material, String thickness, String groove) throws DocumentException {
         PdfPTable table_title_3 = new PdfPTable(1);
         table_title_3.setWidthPercentage(100);
         table_title_3.addCell(getCell("BASE METAL", PdfPCell.ALIGN_CENTER, greenFont, 20));

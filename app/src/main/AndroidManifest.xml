@@ -34,9 +34,6 @@
             android:name=".ProcessActivity"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name=".ResultActivity"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
             android:name=".AboutUsActivity"
             android:theme="@style/MyMaterialTheme" />
         <activity android:name=".WPSActivity"></activity>

@@ -40,7 +40,7 @@
 
 
                 <Button
-                    android:id="@+id/btn1"
+                    android:id="@+id/smaw_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -71,7 +71,7 @@
                 android:visibility="gone">
 
                 <Button
-                    android:id="@+id/btn2"
+                    android:id="@+id/gmaw_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -105,7 +105,7 @@
                 android:visibility="gone">
 
                 <Button
-                    android:id="@+id/btn3"
+                    android:id="@+id/gtaw_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -137,7 +137,7 @@
                 android:visibility="gone">
 
                 <Button
-                    android:id="@+id/btn4"
+                    android:id="@+id/fcaw_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -168,7 +168,7 @@
                 android:visibility="gone">
 
                 <Button
-                    android:id="@+id/btn5"
+                    android:id="@+id/saw_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
