@@ -47,16 +47,9 @@ public class WPSActivity extends AppCompatActivity {
     private static String photo_path = Environment.getExternalStorageDirectory() + File.separator + "a.png";
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
-    private static Font greenFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
-            Font.BOLD, BaseColor.GREEN);
-    private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
-            Font.NORMAL, BaseColor.RED);
-    private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
-            Font.BOLD);
-    private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
-            Font.BOLD);
-    String alpha, r, f, material, thickness, groove, position, weld_progression, min_preheat_temp, type_of_gas, gas_composition, current_type, pulsing, current, voltage, wire_feed_speed, tungsten_size, pulsing_parameters, area_condition, welding_method, process;
+    String material, thickness, groove, position, area_condition, welding_method, process;
     Boolean Square_joint_groove, Single_bevel_groove, Double_bevel_groove, Single_V_groove, Double_V_groove;
+    Double thickness_number, current, voltage, travel_speed, heat_input;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +66,16 @@ public class WPSActivity extends AppCompatActivity {
         Double_bevel_groove = sharedPref.getBoolean("Double_bevel_groove", false);
         Single_V_groove = sharedPref.getBoolean("Single_V_groove", false);
         Double_V_groove = sharedPref.getBoolean("Double_V_groove", false);
+        if (Square_joint_groove)
+            groove = "Square Joint Groove";
+        else if (Single_bevel_groove)
+            groove = "Single Bevel Groove";
+        else if (Double_bevel_groove)
+            groove = "Double Bevel Groove";
+        else if (Single_V_groove)
+            groove = "Single V Groove";
+        else
+            groove = "Double V Groove";
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -80,6 +83,7 @@ public class WPSActivity extends AppCompatActivity {
         }
         Log.d("parameters", thickness + "\n" + material + "\n" + position + "\n" + process + "\n" + area_condition + "\n" + welding_method + "\n" + Square_joint_groove + "\n" + Single_bevel_groove + "\n" + Double_bevel_groove + "\n" + Single_V_groove + "\n" + Double_V_groove);
 
+        thickness_number = Double.parseDouble(thickness);
 
         PDFView pdfView = (PDFView) findViewById(R.id.pdfView);
         File file = new File(FILE);
@@ -112,15 +116,113 @@ public class WPSActivity extends AppCompatActivity {
         Paragraph preface = new Paragraph();
 
         printTitle(document, preface);
-        printHeader(document); //TODO
-        printJoints_Design(document, alpha, r, f);
-        printBase_Metal(document, material, thickness, groove);
-        printFiller_Metal(document);
-        printPosition(document, position, weld_progression);
-        printPreheat(document, preface, min_preheat_temp);
-        printShielding(document, type_of_gas, gas_composition);
-        printElecterical(document, current_type, pulsing, current, voltage, wire_feed_speed, tungsten_size, pulsing_parameters);
+        printHeader(document,process,welding_method); //TODO
+        if (Square_joint_groove && (process.equals("smaw") || process.equals("gtaw"))) {
+            printJoints_Design(document, "N/A", String.valueOf(thickness_number / 2), "N/A");
+        } else if (Square_joint_groove && (process.equals("fcaw") || process.equals("gmaw"))) {
+            printJoints_Design(document, "N/A", "3mm", "N/A");
+        } else if (Square_joint_groove && process.equals("saw")) {
+            printJoints_Design(document, "N/A", "0", "N/A");
+        } else if (Single_bevel_groove && (process.equals("smaw") || process.equals("gtaw") || process.equals("fcaw") || process.equals("gmaw"))) {
+            printJoints_Design(document, "45", "3mm", "3mm");
+        } else if (Single_bevel_groove && process.equals("saw")) {
+            printJoints_Design(document, "60", "0", "6mm");
+        } else if (Double_bevel_groove && (process.equals("smaw") || process.equals("gtaw") || process.equals("fcaw") || process.equals("gmaw"))) {
+            printJoints_Design(document, "45", "3mm", "3mm");
+        } else if (Single_V_groove && (process.equals("smaw") || process.equals("gtaw") || process.equals("fcaw") || process.equals("gmaw"))) {
+            printJoints_Design(document, "60", "3mm", "3mm");
+        } else if (Single_V_groove && (process.equals("saw"))) {
+            if (thickness_number >= 10 && thickness_number <= 24.9)
+                printJoints_Design(document, "60", "0", "6mm");
+            else if (thickness_number >= 25 && thickness_number <= 37.9)
+                printJoints_Design(document, "60", "0", "12mm");
+            else if (thickness_number >= 38 && thickness_number <= 50)
+                printJoints_Design(document, "60", "0", "16mm");
+        } else if (Double_V_groove && (process.equals("smaw") || process.equals("gtaw") || process.equals("fcaw") || process.equals("gmaw"))) {
+            printJoints_Design(document, "60", "3mm", "3mm");
+        } else if (Double_V_groove && (process.equals("saw"))) {
+            printJoints_Design(document, "60", "0", "6mm");
+        }
 
+
+        printBase_Metal(document, material, thickness, groove);
+
+
+        if (process.equals("smaw")) {
+            if (material.equals("ST37"))
+                printFiller_Metal(document, "E6010", "3.125 mm", "yes");
+            else if (material.equals("ST44") || material.equals("ST52"))
+                printFiller_Metal(document, "E7018", "3.125 mm", "yes");
+        } else if (process.equals("gmaw") || process.equals("gtaw"))
+            printFiller_Metal(document, "ER70S-6", "1.2 mm", "yes");
+        else if (process.equals("fcaw"))
+            printFiller_Metal(document, "E71T-11", "1.6 mm", "yes");
+        else if (process.equals("saw")) {
+            if (material.equals("ST37"))
+                printFiller_Metal(document, "F6A2-EL12", "6 mm", "yes");
+            else if (material.equals("ST44") || material.equals("ST52"))
+                printFiller_Metal(document, "F7A2-EL12", "6 mm", "yes");
+        }
+
+
+        if (position.charAt(0) == '3')
+            printPosition(document, "3G - Vertical", position.substring(14));
+        else
+            printPosition(document, position, "N/A");
+
+        if (thickness_number < 20)
+            printPreheat(document, preface, "N/A");
+        else
+            printPreheat(document, preface, "90 : 120 °C");
+
+
+        if (process.equals("smaw") || process.equals("fcaw") || process.equals("saw"))
+            printShielding(document, "N/A", "N/A", "N/A");
+        else if (process.equals("gtaw"))
+            printShielding(document, "Argon", "100% Argon", "8:16 (lit/min)");
+        else
+            printShielding(document, "CO2", "100% CO2", "8:16 (lit/min)");
+
+
+        if (process.equals("smaw")) {
+            current = 100.0;
+            voltage = 26.0;
+            travel_speed = 5.0;
+            heat_input = Heat_Input(current, voltage, travel_speed);
+            printElecterical(document, "DCEP", "100 A", "26 V", "N/A", "5 (mm/sec)", heat_input.toString());
+        } else if (process.equals("gmaw")) {
+            current = 100.0;
+            voltage = 21.0;
+            travel_speed = 4.0;
+            heat_input = Heat_Input(current, voltage, travel_speed);
+            printElecterical(document, "DCEP", "100 A", "21 V", "5.2 (m/min)", "4 (mm/sec)", heat_input.toString());
+        } else if (process.equals("gtaw")) {
+            current = 100.0;
+            voltage = 21.0;
+            travel_speed = 2.0;
+            heat_input = Heat_Input(current, voltage, travel_speed);
+            printElecterical(document, "DCEN", "100 A", "21 V", "N/A", "2 (mm/sec)", heat_input.toString());
+        } else if (process.equals("saw")) {
+            current = 550.0;
+            voltage = 34.0;
+            travel_speed = 5.0;
+            heat_input = Heat_Input(current, voltage, travel_speed);
+            printElecterical(document, "DCEP", "550 A", "34 V", "N/A", "5 (mm/sec)", heat_input.toString());
+        } else if (process.equals("fcaw")) {
+            if (position.equals("4G - Overhead Groove") || position.equals("3G - Vertical Uphill")) {
+                current = 170.0;
+                voltage = 16.0;
+                travel_speed = 2.0;
+                heat_input = Heat_Input(current, voltage, travel_speed);
+                printElecterical(document, "DCEN", "170 A", "16 V", "2.3 (m/min)", "2 (mm/sec)", heat_input.toString());
+            } else if (position.equals("1G - Flat Groove") || position.equals("2G - Horizontal Groove") || position.equals("3G - vertical Downhill")) {
+                current = 250.0;
+                voltage = 18.0;
+                travel_speed = 2.0;
+                heat_input = Heat_Input(current, voltage, travel_speed);
+                printElecterical(document, "DCEN", "250 A", "18 V", "2.8 (m/min)", "2 (mm/sec)", heat_input.toString());
+            }
+        }
         // Start a new page
         document.newPage();
     }
@@ -154,13 +256,13 @@ public class WPSActivity extends AppCompatActivity {
     public void printTitle(Document document, Paragraph preface) throws DocumentException {
         PdfPTable table_title_1 = new PdfPTable(1);
         table_title_1.setWidthPercentage(100);
-        table_title_1.addCell(getCell("WELDING PROCEDURE SPECIFICATION (WPS)", PdfPCell.ALIGN_CENTER, greenFont, 8));
+        table_title_1.addCell(getCell("WELDING PROCEDURE SPECIFICATION (WPS)", PdfPCell.ALIGN_CENTER, catFont, 8));
         document.add(table_title_1);
         addEmptyLine(preface, 2);
         document.add(preface);
     }
 
-    public void printHeader(Document document) throws DocumentException {
+    public void printHeader(Document document, String process, String welding_method) throws DocumentException {
         PdfPTable header_table = new PdfPTable(4);
         header_table.setWidthPercentage(100);
         header_table.addCell(getCell("Project Name", PdfPCell.ALIGN_LEFT, catFont, 8));
@@ -176,9 +278,9 @@ public class WPSActivity extends AppCompatActivity {
         header_table.completeRow();
 
         header_table.addCell(getCell("WELDING PROCESS", PdfPCell.ALIGN_LEFT, catFont, 8));
-        header_table.addCell(getCell("___________", PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        header_table.addCell(getCell(process.toUpperCase(), PdfPCell.ALIGN_MIDDLE, catFont, 8));
         header_table.addCell(getCell("TYPE", PdfPCell.ALIGN_CENTER, catFont, 8));
-        header_table.addCell(getCell("___________", PdfPCell.ALIGN_RIGHT, catFont, 8));
+        header_table.addCell(getCell(welding_method, PdfPCell.ALIGN_RIGHT, catFont, 8));
         header_table.completeRow();
 
         document.add(header_table);
@@ -186,10 +288,10 @@ public class WPSActivity extends AppCompatActivity {
         document.add(linebreak1);
     }
 
-    public void printJoints_Design(Document document, String alpha, String r, String f) throws DocumentException {
+    public void printJoints_Design(Document document, String alpha, String r, String f) throws DocumentException {      //TODO Add photo as a parameter
         PdfPTable table_title_2 = new PdfPTable(1);
         table_title_2.setWidthPercentage(100);
-        table_title_2.addCell(getCell("JOINTS DESIGN", PdfPCell.ALIGN_CENTER, greenFont, 20));
+        table_title_2.addCell(getCell("JOINTS DESIGN", PdfPCell.ALIGN_CENTER, catFont, 20));
         document.add(table_title_2);
 
         PdfPTable table_joints_design = new PdfPTable(2);
@@ -230,7 +332,7 @@ public class WPSActivity extends AppCompatActivity {
     public void printBase_Metal(Document document, String material, String thickness, String groove) throws DocumentException {
         PdfPTable table_title_3 = new PdfPTable(1);
         table_title_3.setWidthPercentage(100);
-        table_title_3.addCell(getCell("BASE METAL", PdfPCell.ALIGN_CENTER, greenFont, 20));
+        table_title_3.addCell(getCell("BASE METAL", PdfPCell.ALIGN_CENTER, catFont, 20));
         document.add(table_title_3);
 
         PdfPTable table_base_metal = new PdfPTable(2);
@@ -256,26 +358,29 @@ public class WPSActivity extends AppCompatActivity {
 
     }
 
-    public void printFiller_Metal(Document document) throws DocumentException {
+    public void printFiller_Metal(Document document, String electrode_classification, String filler_metal_size, String consumable) throws DocumentException {
         PdfPTable table_title_4 = new PdfPTable(1);
         table_title_4.setWidthPercentage(100);
-        table_title_4.addCell(getCell("FILLER METALS", PdfPCell.ALIGN_CENTER, greenFont, 20));
+        table_title_4.addCell(getCell("FILLER METALS", PdfPCell.ALIGN_CENTER, catFont, 20));
         document.add(table_title_4);
 
         PdfPTable table_filler_metal = new PdfPTable(2);
         table_filler_metal.setWidthPercentage(100);
 
-        table_filler_metal.addCell(getCell("AWS CLASSIFICATION", PdfPCell.ALIGN_LEFT, catFont, 8));
-        table_filler_metal.addCell(getCell("___________", PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        table_filler_metal.addCell(getCell("Electrode CLASSIFICATION:", PdfPCell.ALIGN_LEFT, catFont, 8));
+        table_filler_metal.addCell(getCell(electrode_classification, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         table_filler_metal.completeRow();
-        table_filler_metal.addCell(getCell("FILLER METAL SIZE", PdfPCell.ALIGN_LEFT, catFont, 8));
-        table_filler_metal.addCell(getCell("___________", PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        table_filler_metal.addCell(getCell("FILLER METAL SIZE:", PdfPCell.ALIGN_LEFT, catFont, 8));
+        table_filler_metal.addCell(getCell(filler_metal_size, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         table_filler_metal.completeRow();
-        table_filler_metal.addCell(getCell("ELECTRODE-FLUX (CLASS)", PdfPCell.ALIGN_LEFT, catFont, 8));
-        table_filler_metal.addCell(getCell("___________", PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        table_filler_metal.addCell(getCell("CONSUMABLE:", PdfPCell.ALIGN_LEFT, catFont, 8));
+        table_filler_metal.addCell(getCell(consumable, PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        table_filler_metal.completeRow();
+        table_filler_metal.addCell(getCell("ELECTRODE-FLUX (CLASS):", PdfPCell.ALIGN_LEFT, catFont, 8));
+        table_filler_metal.addCell(getCell("N/A", PdfPCell.ALIGN_MIDDLE, catFont, 8));
         table_filler_metal.completeRow();
         table_filler_metal.addCell(getCell("FLUX TRADE NAME", PdfPCell.ALIGN_LEFT, catFont, 8));
-        table_filler_metal.addCell(getCell("___________", PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        table_filler_metal.addCell(getCell("N/A", PdfPCell.ALIGN_MIDDLE, catFont, 8));
         table_filler_metal.completeRow();
         table_filler_metal.addCell(getCell("OTHER", PdfPCell.ALIGN_LEFT, catFont, 8));
         table_filler_metal.addCell(getCell("___________", PdfPCell.ALIGN_MIDDLE, catFont, 8));
@@ -290,7 +395,7 @@ public class WPSActivity extends AppCompatActivity {
     public void printPosition(Document document, String position, String weld_progression) throws DocumentException {
         PdfPTable table_title_5 = new PdfPTable(1);
         table_title_5.setWidthPercentage(100);
-        table_title_5.addCell(getCell("POSITION", PdfPCell.ALIGN_CENTER, greenFont, 20));
+        table_title_5.addCell(getCell("POSITION", PdfPCell.ALIGN_CENTER, catFont, 20));
         document.add(table_title_5);
 
         PdfPTable position_table = new PdfPTable(4);
@@ -312,7 +417,7 @@ public class WPSActivity extends AppCompatActivity {
         document.add(preface);
         PdfPTable table_title_6 = new PdfPTable(1);
         table_title_6.setWidthPercentage(100);
-        table_title_6.addCell(getCell("PREHEAT", PdfPCell.ALIGN_CENTER, greenFont, 20));
+        table_title_6.addCell(getCell("PREHEAT", PdfPCell.ALIGN_CENTER, catFont, 20));
         document.add(table_title_6);
 
         PdfPTable preheat_table = new PdfPTable(4);
@@ -328,10 +433,10 @@ public class WPSActivity extends AppCompatActivity {
         document.add(linebreak6);
     }
 
-    public void printShielding(Document document, String type_of_gas, String gas_composition) throws DocumentException {
+    public void printShielding(Document document, String type_of_gas, String gas_composition, String flow_rate) throws DocumentException {
         PdfPTable table_title_7 = new PdfPTable(1);
         table_title_7.setWidthPercentage(100);
-        table_title_7.addCell(getCell("SHIELDING", PdfPCell.ALIGN_CENTER, greenFont, 20));
+        table_title_7.addCell(getCell("SHIELDING", PdfPCell.ALIGN_CENTER, catFont, 20));
         document.add(table_title_7);
 
         PdfPTable shielding_table = new PdfPTable(2);
@@ -346,7 +451,7 @@ public class WPSActivity extends AppCompatActivity {
         shielding_table.addCell(getCell(gas_composition, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         shielding_table.completeRow();
         shielding_table.addCell(getCell("FLOW RATE(LIT/MIN):", PdfPCell.ALIGN_LEFT, catFont, 8));
-        shielding_table.addCell(getCell("____8:16", PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        shielding_table.addCell(getCell(flow_rate, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         shielding_table.completeRow();
 
         document.add(shielding_table);
@@ -354,22 +459,25 @@ public class WPSActivity extends AppCompatActivity {
         document.add(linebreak7);
     }
 
-    public void printElecterical(Document document, String current_type, String pulsing, String current, String voltage, String wire_feed_speed, String tungsten_size, String pulsing_parameters) throws DocumentException {
+    public void printElecterical(Document document, String current_type, String current, String voltage, String wire_feed_speed, String travel_speed, String heat_input) throws DocumentException {
         PdfPTable table_title_8 = new PdfPTable(1);
         table_title_8.setWidthPercentage(100);
-        table_title_8.addCell(getCell("ELECTRICAL CHARACTERISTICS", PdfPCell.ALIGN_CENTER, greenFont, 20));
+
+        table_title_8.addCell(getCell("ELECTRICAL CHARACTERISTICS", PdfPCell.ALIGN_CENTER, catFont, 20));
         document.add(table_title_8);
+
+        PdfPTable electerical_table1 = new PdfPTable(2);
+        electerical_table1.setWidthPercentage(100);
+        electerical_table1.addCell(getCell("CURRENT TYPE AND POLARITY", PdfPCell.ALIGN_LEFT, catFont, 8));
+        electerical_table1.addCell(getCell(current_type, PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        electerical_table1.completeRow();
+        document.add(electerical_table1);
 
         PdfPTable electerical_table = new PdfPTable(4);
         electerical_table.setWidthPercentage(100);
-        electerical_table.addCell(getCell("CURRENT TYPE AND POLARITY", PdfPCell.ALIGN_LEFT, catFont, 8));
-        electerical_table.addCell(getCell(current_type, PdfPCell.ALIGN_MIDDLE, catFont, 8));
-        electerical_table.addCell(getCell("PULSING (YES OR NO)", PdfPCell.ALIGN_CENTER, catFont, 0));
-        electerical_table.addCell(getCell(pulsing, PdfPCell.ALIGN_RIGHT, catFont, 8));
-        electerical_table.completeRow();
-        electerical_table.addCell(getCell("CURRENT (RANGE)", PdfPCell.ALIGN_LEFT, catFont, 8));
+        electerical_table.addCell(getCell("CURRENT:", PdfPCell.ALIGN_LEFT, catFont, 8));
         electerical_table.addCell(getCell(current, PdfPCell.ALIGN_MIDDLE, catFont, 8));
-        electerical_table.addCell(getCell("VOLTAGE (RANGE)", PdfPCell.ALIGN_CENTER, catFont, 0));
+        electerical_table.addCell(getCell("VOLTAGE:", PdfPCell.ALIGN_CENTER, catFont, 0));
         electerical_table.addCell(getCell(voltage, PdfPCell.ALIGN_RIGHT, catFont, 8));
         electerical_table.completeRow();
         document.add(electerical_table);
@@ -377,15 +485,18 @@ public class WPSActivity extends AppCompatActivity {
 
         PdfPTable electerical_table2 = new PdfPTable(2);
         electerical_table2.setWidthPercentage(100);
+        electerical_table.addCell(getCell("CURRENT TYPE AND POLARITY", PdfPCell.ALIGN_LEFT, catFont, 8));
+        electerical_table.addCell(getCell(current_type, PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        electerical_table2.completeRow();
 
-        electerical_table2.addCell(getCell("WIRE FEED SPEED (RANGE)", PdfPCell.ALIGN_LEFT, catFont, 8));
+        electerical_table2.addCell(getCell("WIRE FEED SPEED:", PdfPCell.ALIGN_LEFT, catFont, 8));
         electerical_table2.addCell(getCell(wire_feed_speed, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         electerical_table2.completeRow();
-        electerical_table2.addCell(getCell("TUNGSTEN ELECTRODE SIZE AND TYPE", PdfPCell.ALIGN_LEFT, catFont, 8));
-        electerical_table2.addCell(getCell(tungsten_size, PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        electerical_table2.addCell(getCell("TRAVEL SPEED:", PdfPCell.ALIGN_LEFT, catFont, 8));
+        electerical_table2.addCell(getCell(travel_speed, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         electerical_table2.completeRow();
-        electerical_table2.addCell(getCell("PULSING PARAMETERS", PdfPCell.ALIGN_LEFT, catFont, 8));
-        electerical_table2.addCell(getCell(pulsing_parameters, PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        electerical_table2.addCell(getCell("HEAT INPUT:", PdfPCell.ALIGN_LEFT, catFont, 8));
+        electerical_table2.addCell(getCell(heat_input, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         electerical_table2.completeRow();
         electerical_table2.addCell(getCell("OTHER", PdfPCell.ALIGN_LEFT, catFont, 8));
         electerical_table2.addCell(getCell("___________", PdfPCell.ALIGN_MIDDLE, catFont, 8));
@@ -397,4 +508,9 @@ public class WPSActivity extends AppCompatActivity {
         document.add(linebreak8);
 
     }
+
+    private Double Heat_Input(Double current, Double voltage, Double travel_speed) {
+        return (voltage * current * 0.9 * 1000) / travel_speed;
+    }
+
 }
