@@ -196,15 +196,14 @@ public class WPSActivity extends AppCompatActivity {
                 printFiller_Metal(document, "E6010", "3.125 mm", "yes");
             else if (material.equals("ST44") || material.equals("ST52"))
                 printFiller_Metal(document, "E7018", "3.125 mm", "yes");
-        } else if (process.equals("gmaw") || process.equals("gtaw"))
+        } else if (process.equals("gmaw"))
             printFiller_Metal(document, "ER70S-6", "1.2 mm", "yes");
+        else if (process.equals("gtaw"))
+            printFiller_Metal(document, "ER70S-6", "1.6 mm", "yes");
         else if (process.equals("fcaw"))
             printFiller_Metal(document, "E71T-11", "1.6 mm", "yes");
         else if (process.equals("saw")) {
-            if (material.equals("ST37"))
-                printFiller_Metal(document, "F6A2-EL12", "6 mm", "yes");
-            else if (material.equals("ST44") || material.equals("ST52"))
-                printFiller_Metal(document, "F7A2-EL12", "6 mm", "yes");
+            printFiller_Metal(document, "F7A2-EM12K", "6 mm", "yes");
         }
 
 
@@ -234,17 +233,17 @@ public class WPSActivity extends AppCompatActivity {
             heat_input = Heat_Input(current, voltage, travel_speed);
             printElecterical(document, "DCEP", "100 A", "26 V", "N/A", "5 (mm/sec)", heat_input.toString());
         } else if (process.equals("gmaw")) {
-            current = 100.0;
-            voltage = 21.0;
+            current = 200.0;
+            voltage = 25.0;
             travel_speed = 4.0;
             heat_input = Heat_Input(current, voltage, travel_speed);
-            printElecterical(document, "DCEP", "100 A", "21 V", "5.2 (m/min)", "4 (mm/sec)", heat_input.toString());
+            printElecterical(document, "DCEP", "200 A", "25 V", "5.2 (m/min)", "4 (mm/sec)", heat_input.toString());
         } else if (process.equals("gtaw")) {
             current = 100.0;
-            voltage = 21.0;
+            voltage = 13.0;
             travel_speed = 2.0;
             heat_input = Heat_Input(current, voltage, travel_speed);
-            printElecterical(document, "DCEN", "100 A", "21 V", "N/A", "2 (mm/sec)", heat_input.toString());
+            printElecterical(document, "DCEN", "100 A", "13 V", "N/A", "2 (mm/sec)", heat_input.toString());
         } else if (process.equals("saw")) {
             current = 550.0;
             voltage = 34.0;
@@ -384,7 +383,7 @@ public class WPSActivity extends AppCompatActivity {
         table_joints_design.addCell(getCell("Backing Material:___N/A", PdfPCell.ALIGN_LEFT, catFont, 8));
         table_joints_design.addCell(getCell("", PdfPCell.ALIGN_MIDDLE, catFont, 8));
         table_joints_design.completeRow();
-        table_joints_design.addCell(getCell("GROOVE ANGLE (α)", PdfPCell.ALIGN_LEFT, catFont, 8));
+        table_joints_design.addCell(getCell("GROOVE ANGLE (A)", PdfPCell.ALIGN_LEFT, catFont, 8));
         table_joints_design.addCell(getCell(alpha, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         table_joints_design.completeRow();
         table_joints_design.addCell(getCell("ROOT OPENING(R)", PdfPCell.ALIGN_LEFT, catFont, 8));
@@ -416,7 +415,7 @@ public class WPSActivity extends AppCompatActivity {
         table_base_metal.addCell(getCell(material, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         table_base_metal.completeRow();
         table_base_metal.addCell(getCell("THICKNESS", PdfPCell.ALIGN_LEFT, catFont, 8));
-        table_base_metal.addCell(getCell(thickness, PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        table_base_metal.addCell(getCell(thickness+" mm", PdfPCell.ALIGN_MIDDLE, catFont, 8));
         table_base_metal.completeRow();
         table_base_metal.addCell(getCell("GROOVE", PdfPCell.ALIGN_LEFT, catFont, 8));
         table_base_metal.addCell(getCell(groove, PdfPCell.ALIGN_MIDDLE, catFont, 8));
@@ -496,7 +495,7 @@ public class WPSActivity extends AppCompatActivity {
         preheat_table.addCell(getCell("PREHEAT TEMP. (MINIMUM)", PdfPCell.ALIGN_LEFT, catFont, 8));
         preheat_table.addCell(getCell(min_preheat_temp, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         preheat_table.addCell(getCell("INTERPASS TEMP. (MAXIMUM)", PdfPCell.ALIGN_CENTER, catFont, 0));
-        preheat_table.addCell(getCell("200", PdfPCell.ALIGN_RIGHT, catFont, 8));
+        preheat_table.addCell(getCell("200 C", PdfPCell.ALIGN_RIGHT, catFont, 8));
         preheat_table.completeRow();
 
         document.add(preheat_table);
@@ -567,7 +566,7 @@ public class WPSActivity extends AppCompatActivity {
         electerical_table2.addCell(getCell(travel_speed, PdfPCell.ALIGN_MIDDLE, catFont, 8));
         electerical_table2.completeRow();
         electerical_table2.addCell(getCell("HEAT INPUT:", PdfPCell.ALIGN_LEFT, catFont, 8));
-        electerical_table2.addCell(getCell(heat_input, PdfPCell.ALIGN_MIDDLE, catFont, 8));
+        electerical_table2.addCell(getCell(heat_input+" J", PdfPCell.ALIGN_MIDDLE, catFont, 8));
         electerical_table2.completeRow();
         electerical_table2.addCell(getCell("OTHER", PdfPCell.ALIGN_LEFT, catFont, 8));
         electerical_table2.addCell(getCell("___________", PdfPCell.ALIGN_MIDDLE, catFont, 8));

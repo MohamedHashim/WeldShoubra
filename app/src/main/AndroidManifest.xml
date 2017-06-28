@@ -41,6 +41,9 @@
             android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".UTS_Activity"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ProfileActivity"
             android:theme="@style/MyMaterialTheme"></activity>
     </application>
 

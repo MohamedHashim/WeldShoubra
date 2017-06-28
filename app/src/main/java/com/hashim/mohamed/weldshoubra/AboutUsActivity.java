@@ -1,11 +1,11 @@
 package com.hashim.mohamed.weldshoubra;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +19,7 @@ public class AboutUsActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
     ImageView back_btn;
-    TextView toolbartxt;
+    TextView toolbartxt, talaat, faheem, ibrahim, ashery, youmna, tokhy, noor, nggar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +38,78 @@ public class AboutUsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        talaat = (TextView) findViewById(R.id.talaat);
+        faheem = (TextView) findViewById(R.id.faheem);
+        ibrahim = (TextView) findViewById(R.id.ibrahim);
+        ashery = (TextView) findViewById(R.id.alashery);
+        youmna = (TextView) findViewById(R.id.youmna);
+        tokhy = (TextView) findViewById(R.id.eltokhey);
+        noor = (TextView) findViewById(R.id.noor);
+        nggar = (TextView) findViewById(R.id.nggar);
+        talaat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutUsActivity.this, ProfileActivity.class);
+                intent.putExtra("name", talaat.getText());
+                startActivity(intent);
+            }
+        });
+        faheem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutUsActivity.this, ProfileActivity.class);
+                intent.putExtra("name", faheem.getText());
+                startActivity(intent);
+            }
+        });
+        ibrahim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutUsActivity.this, ProfileActivity.class);
+                intent.putExtra("name", ibrahim.getText());
+                startActivity(intent);
+            }
+        });
+        ashery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutUsActivity.this, ProfileActivity.class);
+                intent.putExtra("name", ashery.getText());
+                startActivity(intent);
+            }
+        });
+        youmna.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutUsActivity.this, ProfileActivity.class);
+                intent.putExtra("name", youmna.getText());
+                startActivity(intent);
+            }
+        });
+        tokhy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutUsActivity.this, ProfileActivity.class);
+                intent.putExtra("name", tokhy.getText());
+                startActivity(intent);
+            }
+        });
+        noor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutUsActivity.this, ProfileActivity.class);
+                intent.putExtra("name", noor.getText());
+                startActivity(intent);
+            }
+        });
+        nggar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutUsActivity.this, ProfileActivity.class);
+                intent.putExtra("name", nggar.getText());
+                startActivity(intent);
             }
         });
 

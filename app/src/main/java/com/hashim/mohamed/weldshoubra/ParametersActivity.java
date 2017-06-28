@@ -317,7 +317,7 @@ public class ParametersActivity extends AppCompatActivity {
                 if (thickness.getText().toString().isEmpty())
                     thickness.setError("this field is empty");
                 else {
-                    if (!Square_joint_CheckBox.isChecked() && !Single_bevel_joint_CheckBox.isChecked() && !Double_bevel_joint_CheckBox.isChecked() && !Single_V_joint_CheckBox.isChecked() && !Double_bevel_joint_CheckBox.isChecked()) {
+                    if (!Square_joint_CheckBox.isChecked() && !Single_bevel_joint_CheckBox.isChecked() && !Double_bevel_joint_CheckBox.isChecked() && !Single_V_joint_CheckBox.isChecked() && !Double_V_joint_CheckBox.isChecked()) {
                         groove_txt.setError("You have to select Groove type");
                         Toast.makeText(getApplicationContext(), "You have to select Groove type", Toast.LENGTH_LONG).show();
                     } else {

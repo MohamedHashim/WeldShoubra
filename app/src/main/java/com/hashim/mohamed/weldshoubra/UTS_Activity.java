@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+
 import static java.lang.Math.pow;
 
 public class UTS_Activity extends AppCompatActivity {
@@ -23,7 +26,7 @@ public class UTS_Activity extends AppCompatActivity {
     ImageView back_btn;
     TextView toolbartxt, title_txt, uts_result;
     String process, position;
-    Double f, s, v, t, result;
+    Double f, s, v, t, result, rounded_result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +98,10 @@ public class UTS_Activity extends AppCompatActivity {
             t = 200.0;
             result = uts_result(f, s, v, t);
         }
-        uts_result.setText(uts_result.getText() + result.toString());
+        BigDecimal bd = new BigDecimal(result);
+        bd = bd.round(new MathContext(5));
+        rounded_result = bd.doubleValue();
+        uts_result.setText(uts_result.getText() + rounded_result.toString() + " MPa");
     }
 
     Double uts_result(double f, double s, double v, double t) {
