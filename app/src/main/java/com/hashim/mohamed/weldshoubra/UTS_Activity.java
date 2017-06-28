@@ -2,11 +2,11 @@ package com.hashim.mohamed.weldshoubra;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -90,6 +90,7 @@ public class UTS_Activity extends AppCompatActivity {
             s = 4.0;
             v = 21.0;
             t = 200.0;
+            result = uts_result(f, s, v, t);
         } else if (process.equals("smaw")) {
             title_txt.setText(title_txt.getText() + "SMAW process");
             f = 6.0;
