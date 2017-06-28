@@ -1,16 +1,23 @@
 package com.hashim.mohamed.weldshoubra;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +49,13 @@ import java.io.IOException;
 import java.util.Date;
 
 public class WPSActivity extends AppCompatActivity {
+    private DrawerLayout mDrawer;
+    private Toolbar toolbar;
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+    ImageView back_btn;
+    TextView toolbartxt;
+    Button UTS_btn;
 
     private static String FILE = Environment.getExternalStorageDirectory() + File.separator + "firstPdf.pdf";
     private static String photo_path = Environment.getExternalStorageDirectory() + File.separator + "a.png";
@@ -55,6 +69,22 @@ public class WPSActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wps);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        drawerToggle = setupDrawerToggle();
+        setSupportActionBar(toolbar);
+        setupDrawerContent(nvDrawer);
+        back_btn = (ImageView) findViewById(R.id.back_btn);
+        toolbartxt = (TextView) findViewById(R.id.toolbartxt);
+        toolbartxt.setText("WPS");
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        UTS_btn = (Button) findViewById(R.id.uts);
         SharedPreferences sharedPref = getSharedPreferences("parameters", getApplicationContext().MODE_PRIVATE);
         thickness = sharedPref.getString("thickness", "");
         material = sharedPref.getString("material", "");
@@ -81,6 +111,14 @@ public class WPSActivity extends AppCompatActivity {
         if (bundle != null) {
             process = bundle.getString("process");
         }
+        UTS_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WPSActivity.this, UTS_Activity.class);
+                intent.putExtra("process", process);
+                startActivity(intent);
+            }
+        });
         Log.d("parameters", thickness + "\n" + material + "\n" + position + "\n" + process + "\n" + area_condition + "\n" + welding_method + "\n" + Square_joint_groove + "\n" + Single_bevel_groove + "\n" + Double_bevel_groove + "\n" + Single_V_groove + "\n" + Double_V_groove);
 
         thickness_number = Double.parseDouble(thickness);
@@ -116,7 +154,7 @@ public class WPSActivity extends AppCompatActivity {
         Paragraph preface = new Paragraph();
 
         printTitle(document, preface);
-        printHeader(document,process,welding_method); //TODO
+        printHeader(document, process, welding_method); //TODO
         if (Square_joint_groove && (process.equals("smaw") || process.equals("gtaw"))) {
             printJoints_Design(document, "N/A", String.valueOf(thickness_number / 2), "N/A");
         } else if (Square_joint_groove && (process.equals("fcaw") || process.equals("gmaw"))) {
@@ -511,6 +549,45 @@ public class WPSActivity extends AppCompatActivity {
 
     private Double Heat_Input(Double current, Double voltage, Double travel_speed) {
         return (voltage * current * 0.9 * 1000) / travel_speed;
+    }
+
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
+        // and will not render the hamburger icon without it.
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_first_fragment:
+                Intent i2 = new Intent(this, MainActivity.class);
+                startActivity(i2);
+                break;
+            case R.id.nav_second_fragment:
+                Intent i = new Intent(this, AboutUsActivity.class);
+                startActivity(i);
+                break;
+            case R.id.nav_third_fragment:
+                Intent logout = new Intent(this, MainActivity.class);
+                logout.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(logout);
+                finish();
+                moveTaskToBack(true);
+                break;
+        }
+        menuItem.setChecked(true);
+        mDrawer.closeDrawers();
     }
 
 }

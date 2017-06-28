@@ -211,79 +211,99 @@ public class ParametersActivity extends AppCompatActivity {
                 welding_method_index = -1;
             }
         });
+        editor.putBoolean("Square_joint_groove", false);
+        editor.putBoolean("Single_bevel_groove", false);
+        editor.putBoolean("Double_bevel_groove", false);
+        editor.putBoolean("Single_V_groove", false);
+        editor.putBoolean("Double_V_groove", false);
 
         Square_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (Square_joint_CheckBox.isChecked()) {
+                if (isChecked) {
                     editor.putBoolean("Square_joint_groove", true);
+                    editor.putBoolean("Single_bevel_groove", false);
+                    editor.putBoolean("Double_bevel_groove", false);
+                    editor.putBoolean("Single_V_groove", false);
+                    editor.putBoolean("Double_V_groove", false);
                     groove_txt.setError(null);
                     Single_bevel_joint_CheckBox.setChecked(false);
                     Double_bevel_joint_CheckBox.setChecked(false);
                     Single_V_joint_CheckBox.setChecked(false);
                     Double_V_joint_CheckBox.setChecked(false);
-                } else
-                    editor.putBoolean("Square_joint_groove", false);
+                }
             }
         });
 
         Single_bevel_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (Single_bevel_joint_CheckBox.isChecked()) {
+                if (isChecked) {
                     editor.putBoolean("Single_bevel_groove", true);
+                    editor.putBoolean("Square_joint_groove", false);
+                    editor.putBoolean("Double_bevel_groove", false);
+                    editor.putBoolean("Single_V_groove", false);
+                    editor.putBoolean("Double_V_groove", false);
                     groove_txt.setError(null);
                     Square_joint_CheckBox.setChecked(false);
                     Double_bevel_joint_CheckBox.setChecked(false);
                     Single_V_joint_CheckBox.setChecked(false);
                     Double_V_joint_CheckBox.setChecked(false);
-                } else
-                    editor.putBoolean("Single_bevel_groove", false);
+                }
             }
         });
 
         Double_bevel_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (Double_bevel_joint_CheckBox.isChecked()) {
+                if (isChecked) {
                     editor.putBoolean("Double_bevel_groove", true);
+                    editor.putBoolean("Square_joint_groove", false);
+                    editor.putBoolean("Single_bevel_groove", false);
+                    editor.putBoolean("Single_V_groove", false);
+                    editor.putBoolean("Double_V_groove", false);
                     groove_txt.setError(null);
                     Single_bevel_joint_CheckBox.setChecked(false);
                     Square_joint_CheckBox.setChecked(false);
                     Single_V_joint_CheckBox.setChecked(false);
                     Double_V_joint_CheckBox.setChecked(false);
-                } else
-                    editor.putBoolean("Double_bevel_groove", false);
+                }
             }
         });
 
         Single_V_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (Single_V_joint_CheckBox.isChecked()) {
+                if (isChecked) {
                     editor.putBoolean("Single_V_groove", true);
+                    editor.putBoolean("Square_joint_groove", false);
+                    editor.putBoolean("Single_bevel_groove", false);
+                    editor.putBoolean("Double_bevel_groove", false);
+                    editor.putBoolean("Double_V_groove", false);
                     groove_txt.setError(null);
                     Single_bevel_joint_CheckBox.setChecked(false);
                     Double_bevel_joint_CheckBox.setChecked(false);
                     Square_joint_CheckBox.setChecked(false);
                     Double_V_joint_CheckBox.setChecked(false);
-                } else
-                    editor.putBoolean("Single_V_groove", false);
+                }
             }
         });
 
         Double_V_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (Double_V_joint_CheckBox.isChecked()) {
+                if (isChecked) {
                     editor.putBoolean("Double_V_groove", true);
+                    editor.putBoolean("Square_joint_groove", false);
+                    editor.putBoolean("Single_bevel_groove", false);
+                    editor.putBoolean("Double_bevel_groove", false);
+                    editor.putBoolean("Single_V_groove", false);
                     groove_txt.setError(null);
                     Single_bevel_joint_CheckBox.setChecked(false);
                     Double_bevel_joint_CheckBox.setChecked(false);
                     Single_V_joint_CheckBox.setChecked(false);
                     Square_joint_CheckBox.setChecked(false);
-                } else
-                    editor.putBoolean("Double_V_groove", false);
+                }
             }
         });
 

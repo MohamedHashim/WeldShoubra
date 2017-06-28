@@ -36,7 +36,12 @@
         <activity
             android:name=".AboutUsActivity"
             android:theme="@style/MyMaterialTheme" />
-        <activity android:name=".WPSActivity"></activity>
+        <activity
+            android:name=".WPSActivity"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".UTS_Activity"
+            android:theme="@style/MyMaterialTheme"></activity>
     </application>
 
 </manifest>
