@@ -17,11 +17,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
@@ -42,11 +44,9 @@ public class ParametersActivity extends AppCompatActivity {
     ImageView back_btn;
     TextView toolbartxt, groove_txt, material2;
     private EditText thickness;
-    private String groove_types[] = {"Square joint", "Single-bevel joint", "Double-bevel joint", "Single-V joint", "Double-V joint"};
     int position_index, area_condition_index, welding_method_index;
     Double thick_num;
     private CheckBox Square_joint_CheckBox, Single_bevel_joint_CheckBox, Double_bevel_joint_CheckBox, Single_V_joint_CheckBox, Double_V_joint_CheckBox;
-    boolean Square_joint, Single_bevel_joint, Double_bevel_joint, Single_V_joint, Double_V_joint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,6 +212,80 @@ public class ParametersActivity extends AppCompatActivity {
             }
         });
 
+        Square_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (Square_joint_CheckBox.isChecked()) {
+                    editor.putBoolean("Square_joint_groove", true);
+                    groove_txt.setError(null);
+                    Single_bevel_joint_CheckBox.setChecked(false);
+                    Double_bevel_joint_CheckBox.setChecked(false);
+                    Single_V_joint_CheckBox.setChecked(false);
+                    Double_V_joint_CheckBox.setChecked(false);
+                } else
+                    editor.putBoolean("Square_joint_groove", false);
+            }
+        });
+
+        Single_bevel_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (Single_bevel_joint_CheckBox.isChecked()) {
+                    editor.putBoolean("Single_bevel_groove", true);
+                    groove_txt.setError(null);
+                    Square_joint_CheckBox.setChecked(false);
+                    Double_bevel_joint_CheckBox.setChecked(false);
+                    Single_V_joint_CheckBox.setChecked(false);
+                    Double_V_joint_CheckBox.setChecked(false);
+                } else
+                    editor.putBoolean("Single_bevel_groove", false);
+            }
+        });
+
+        Double_bevel_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (Double_bevel_joint_CheckBox.isChecked()) {
+                    editor.putBoolean("Double_bevel_groove", true);
+                    groove_txt.setError(null);
+                    Single_bevel_joint_CheckBox.setChecked(false);
+                    Square_joint_CheckBox.setChecked(false);
+                    Single_V_joint_CheckBox.setChecked(false);
+                    Double_V_joint_CheckBox.setChecked(false);
+                } else
+                    editor.putBoolean("Double_bevel_groove", false);
+            }
+        });
+
+        Single_V_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (Single_V_joint_CheckBox.isChecked()) {
+                    editor.putBoolean("Single_V_groove", true);
+                    groove_txt.setError(null);
+                    Single_bevel_joint_CheckBox.setChecked(false);
+                    Double_bevel_joint_CheckBox.setChecked(false);
+                    Square_joint_CheckBox.setChecked(false);
+                    Double_V_joint_CheckBox.setChecked(false);
+                } else
+                    editor.putBoolean("Single_V_groove", false);
+            }
+        });
+
+        Double_V_joint_CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (Double_V_joint_CheckBox.isChecked()) {
+                    editor.putBoolean("Double_V_groove", true);
+                    groove_txt.setError(null);
+                    Single_bevel_joint_CheckBox.setChecked(false);
+                    Double_bevel_joint_CheckBox.setChecked(false);
+                    Single_V_joint_CheckBox.setChecked(false);
+                    Square_joint_CheckBox.setChecked(false);
+                } else
+                    editor.putBoolean("Double_V_groove", false);
+            }
+        });
 
         next.setOnClickListener(new View.OnClickListener() {
             boolean smaw, gmaw, gtaw, fcaw, saw;
@@ -219,85 +293,56 @@ public class ParametersActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("items", position_index + "\t" + area_condition_index + "\t" + welding_method_index);
-//                View selectedView = position_spinner.getSelectedView();
-//                if (selectedView != null && selectedView instanceof TextView) {
-//                    TextView selectedTextView = (TextView) selectedView;
-//                    if (position_index ==-1) {
-//                        selectedTextView.setError("Select item");
-//                    }
-//                    else {
-//                        selectedTextView.setError(null);
-//                    }
-//                }
-
 
                 if (thickness.getText().toString().isEmpty())
                     thickness.setError("this field is empty");
                 else {
-
-
-                    if (welding_method_index == -1 && area_condition_index == -1) {
-                        smaw = true;
-                        gmaw = true;
-                        gtaw = true;
-                        fcaw = true;
-                        if (thick_num >= 10 && position_index == 0)
+                    if (!Square_joint_CheckBox.isChecked() && !Single_bevel_joint_CheckBox.isChecked() && !Double_bevel_joint_CheckBox.isChecked() && !Single_V_joint_CheckBox.isChecked() && !Double_bevel_joint_CheckBox.isChecked()) {
+                        groove_txt.setError("You have to select Groove type");
+                        Toast.makeText(getApplicationContext(), "You have to select Groove type", Toast.LENGTH_LONG).show();
+                    } else {
+                        if (welding_method_index == -1 && area_condition_index == -1) {
+                            smaw = true;
+                            gmaw = true;
+                            gtaw = true;
+                            fcaw = true;
+                            if (thick_num >= 10 && position_index == 0)
+                                saw = true;
+                        }
+                        if (thick_num >= 10 && position_index == 0 && welding_method_index == 2)
                             saw = true;
+                        else
+                            saw = false;
+                        if (welding_method_index == 1 && area_condition_index == 1)
+                            gmaw = true;
+                        else
+                            gmaw = false;
+                        if (welding_method_index == 0 && area_condition_index == 1)
+                            gtaw = true;
+                        else
+                            gtaw = false;
+                        if (welding_method_index == 1)
+                            fcaw = true;
+                        else
+                            fcaw = false;
+                        if (welding_method_index == 0)
+                            smaw = true;
+                        else
+                            smaw = false;
+
+
+                        Log.d("bool data", thick_num + "\t" + position_index + "\t" + welding_method_index + "\t" + area_condition_index);
+                        Log.d("bool", saw + "\t" + gmaw + "\t" + gtaw + "\t" + fcaw + "\t" + smaw);
+                        editor.apply();
+
+                        Intent intent = new Intent(ParametersActivity.this, ProcessActivity.class);
+                        intent.putExtra("saw", saw);
+                        intent.putExtra("gmaw", gmaw);
+                        intent.putExtra("gtaw", gtaw);
+                        intent.putExtra("fcaw", fcaw);
+                        intent.putExtra("smaw", smaw);
+                        startActivity(intent);
                     }
-                    if (thick_num >= 10 && position_index == 0 && welding_method_index == 2)
-                        saw = true;
-                    else
-                        saw = false;
-                    if (welding_method_index == 1 && area_condition_index == 1)
-                        gmaw = true;
-                    else
-                        gmaw = false;
-                    if (welding_method_index == 0 && area_condition_index == 1)
-                        gtaw = true;
-                    else
-                        gtaw = false;
-                    if (welding_method_index == 1)
-                        fcaw = true;
-                    else
-                        fcaw = false;
-                    if (welding_method_index == 0)
-                        smaw = true;
-                    else
-                        smaw = false;
-
-
-                    Log.d("bool data", thick_num + "\t" + position_index + "\t" + welding_method_index + "\t" + area_condition_index);
-                    Log.d("bool", saw + "\t" + gmaw + "\t" + gtaw + "\t" + fcaw + "\t" + smaw);
-
-                    if (Square_joint_CheckBox.isChecked())
-                        editor.putBoolean("Square_joint_groove", true);
-                    else
-                        editor.putBoolean("Square_joint_groove", false);
-                    if (Single_bevel_joint_CheckBox.isChecked())
-                        editor.putBoolean("Single_bevel_groove", true);
-                    else
-                        editor.putBoolean("Single_bevel_groove", false);
-                    if (Double_bevel_joint_CheckBox.isChecked())
-                        editor.putBoolean("Double_bevel_groove", true);
-                    else
-                        editor.putBoolean("Double_bevel_groove", false);
-                    if (Single_V_joint_CheckBox.isChecked())
-                        editor.putBoolean("Single_V_groove", true);
-                    else
-                        editor.putBoolean("Single_V_groove", false);
-                    if (Double_V_joint_CheckBox.isChecked())
-                        editor.putBoolean("Double_V_groove", true);
-                    else
-                        editor.putBoolean("Double_V_groove", false);
-                    editor.apply();
-
-                    Intent intent = new Intent(ParametersActivity.this, ProcessActivity.class);
-                    intent.putExtra("saw", saw);
-                    intent.putExtra("gmaw", gmaw);
-                    intent.putExtra("gtaw", gtaw);
-                    intent.putExtra("fcaw", fcaw);
-                    intent.putExtra("smaw", smaw);
-                    startActivity(intent);
                 }
             }
         });
