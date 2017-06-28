@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">M6YN Welding</string>
+    <string name="app_name">Mob WPS</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="function">Selecting suitable welding process and Welding Procedure Specification             (WPS) by determining the optimum welding Parameter.</string>

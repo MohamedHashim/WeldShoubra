@@ -93,10 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 moveTaskToBack(true);
                 break;
-            case R.id.nav_fourth_fragment:
-                Intent i1 = new Intent(this, WPSActivity.class);
-                startActivity(i1);
-                break;
         }
         menuItem.setChecked(true);
         mDrawer.closeDrawers();

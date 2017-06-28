@@ -33,7 +33,7 @@ public class AboutUsActivity extends AppCompatActivity {
         setupDrawerContent(nvDrawer);
         back_btn = (ImageView) findViewById(R.id.back_btn);
         toolbartxt = (TextView) findViewById(R.id.toolbartxt);
-        toolbartxt.setText("Expert system for arc welding processes");
+        toolbartxt.setText("Mob WPS");
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

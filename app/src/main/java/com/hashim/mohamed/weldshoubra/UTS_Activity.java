@@ -1,6 +1,7 @@
 package com.hashim.mohamed.weldshoubra;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,7 +22,7 @@ public class UTS_Activity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     ImageView back_btn;
     TextView toolbartxt, title_txt, uts_result;
-    String process;
+    String process, position;
     Double f, s, v, t, result;
 
     @Override
@@ -50,6 +51,8 @@ public class UTS_Activity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         if (bundle != null)
             process = bundle.getString("process");
+        SharedPreferences sharedPref = getSharedPreferences("parameters", getApplicationContext().MODE_PRIVATE);
+        position = sharedPref.getString("position", "");
 
         if (process.equals("saw")) {
             title_txt.setText(title_txt.getText() + "SAW process");
@@ -60,9 +63,15 @@ public class UTS_Activity extends AppCompatActivity {
             result = uts_result(f, s, v, t);
         } else if (process.equals("fcaw")) {//TODO data is wrong
             title_txt.setText(title_txt.getText() + "FCAW process");
-            f = 6.0;
-            s = 5.0;
-            v = 34.0;
+            if (position.equals("4G - Overhead Groove") || position.equals("3G - Vertical Uphill")) {
+                f = 2.3;
+                v = 16.0;
+
+            } else {
+                f = 2.8;
+                v = 18.0;
+            }
+            s = 2.0;
             t = 200.0;
             result = uts_result(f, s, v, t);
         } else if (process.equals("gtaw")) {

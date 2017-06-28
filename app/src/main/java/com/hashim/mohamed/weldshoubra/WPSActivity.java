@@ -46,6 +46,8 @@ import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class WPSActivity extends AppCompatActivity {
@@ -57,11 +59,10 @@ public class WPSActivity extends AppCompatActivity {
     TextView toolbartxt;
     Button UTS_btn;
 
-    private static String FILE = Environment.getExternalStorageDirectory() + File.separator + "firstPdf.pdf";
-    private static String photo_path = Environment.getExternalStorageDirectory() + File.separator + "a.png";
+    private static String FILE = Environment.getExternalStorageDirectory() + "/MobWPS/WPS/";
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
-    String material, thickness, groove, position, area_condition, welding_method, process;
+    String material, thickness, groove, position, area_condition, welding_method, process, date_txt, photo_path;
     Boolean Square_joint_groove, Single_bevel_groove, Double_bevel_groove, Single_V_groove, Double_V_groove;
     Double thickness_number, current, voltage, travel_speed, heat_input;
 
@@ -96,6 +97,7 @@ public class WPSActivity extends AppCompatActivity {
         Double_bevel_groove = sharedPref.getBoolean("Double_bevel_groove", false);
         Single_V_groove = sharedPref.getBoolean("Single_V_groove", false);
         Double_V_groove = sharedPref.getBoolean("Double_V_groove", false);
+        photo_path = sharedPref.getString("photo_path", "");
         if (Square_joint_groove)
             groove = "Square Joint Groove";
         else if (Single_bevel_groove)
@@ -122,13 +124,16 @@ public class WPSActivity extends AppCompatActivity {
         Log.d("parameters", thickness + "\n" + material + "\n" + position + "\n" + process + "\n" + area_condition + "\n" + welding_method + "\n" + Square_joint_groove + "\n" + Single_bevel_groove + "\n" + Double_bevel_groove + "\n" + Single_V_groove + "\n" + Double_V_groove);
 
         thickness_number = Double.parseDouble(thickness);
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        date_txt = df.format(c.getTime());
 
         PDFView pdfView = (PDFView) findViewById(R.id.pdfView);
-        File file = new File(FILE);
+        File file = new File(FILE + date_txt + ".pdf");
 
         try {
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(FILE));
+            PdfWriter.getInstance(document, new FileOutputStream(FILE + date_txt + ".pdf"));
             document.open();
             addMetaData(document);
             DesignPage(document);
@@ -154,32 +159,32 @@ public class WPSActivity extends AppCompatActivity {
         Paragraph preface = new Paragraph();
 
         printTitle(document, preface);
-        printHeader(document, process, welding_method); //TODO
+        printHeader(document, process, welding_method, date_txt); //TODO
         if (Square_joint_groove && (process.equals("smaw") || process.equals("gtaw"))) {
-            printJoints_Design(document, "N/A", String.valueOf(thickness_number / 2), "N/A");
+            printJoints_Design(document, "N/A", String.valueOf(thickness_number / 2), "N/A", groove);
         } else if (Square_joint_groove && (process.equals("fcaw") || process.equals("gmaw"))) {
-            printJoints_Design(document, "N/A", "3mm", "N/A");
+            printJoints_Design(document, "N/A", "3mm", "N/A", groove);
         } else if (Square_joint_groove && process.equals("saw")) {
-            printJoints_Design(document, "N/A", "0", "N/A");
+            printJoints_Design(document, "N/A", "0", "N/A", groove);
         } else if (Single_bevel_groove && (process.equals("smaw") || process.equals("gtaw") || process.equals("fcaw") || process.equals("gmaw"))) {
-            printJoints_Design(document, "45", "3mm", "3mm");
+            printJoints_Design(document, "45", "3mm", "3mm", groove);
         } else if (Single_bevel_groove && process.equals("saw")) {
-            printJoints_Design(document, "60", "0", "6mm");
+            printJoints_Design(document, "60", "0", "6mm", groove);
         } else if (Double_bevel_groove && (process.equals("smaw") || process.equals("gtaw") || process.equals("fcaw") || process.equals("gmaw"))) {
-            printJoints_Design(document, "45", "3mm", "3mm");
+            printJoints_Design(document, "45", "3mm", "3mm", groove);
         } else if (Single_V_groove && (process.equals("smaw") || process.equals("gtaw") || process.equals("fcaw") || process.equals("gmaw"))) {
-            printJoints_Design(document, "60", "3mm", "3mm");
+            printJoints_Design(document, "60", "3mm", "3mm", groove);
         } else if (Single_V_groove && (process.equals("saw"))) {
             if (thickness_number >= 10 && thickness_number <= 24.9)
-                printJoints_Design(document, "60", "0", "6mm");
+                printJoints_Design(document, "60", "0", "6mm", groove);
             else if (thickness_number >= 25 && thickness_number <= 37.9)
-                printJoints_Design(document, "60", "0", "12mm");
+                printJoints_Design(document, "60", "0", "12mm", groove);
             else if (thickness_number >= 38 && thickness_number <= 50)
-                printJoints_Design(document, "60", "0", "16mm");
+                printJoints_Design(document, "60", "0", "16mm", groove);
         } else if (Double_V_groove && (process.equals("smaw") || process.equals("gtaw") || process.equals("fcaw") || process.equals("gmaw"))) {
-            printJoints_Design(document, "60", "3mm", "3mm");
+            printJoints_Design(document, "60", "3mm", "3mm", groove);
         } else if (Double_V_groove && (process.equals("saw"))) {
-            printJoints_Design(document, "60", "0", "6mm");
+            printJoints_Design(document, "60", "0", "6mm", groove);
         }
 
 
@@ -300,7 +305,7 @@ public class WPSActivity extends AppCompatActivity {
         document.add(preface);
     }
 
-    public void printHeader(Document document, String process, String welding_method) throws DocumentException {
+    public void printHeader(Document document, String process, String welding_method, String date) throws DocumentException {
         PdfPTable header_table = new PdfPTable(4);
         header_table.setWidthPercentage(100);
         header_table.addCell(getCell("Project Name", PdfPCell.ALIGN_LEFT, catFont, 8));
@@ -312,7 +317,7 @@ public class WPSActivity extends AppCompatActivity {
         header_table.addCell(getCell("WPS No", PdfPCell.ALIGN_LEFT, catFont, 8));
         header_table.addCell(getCell("___________", PdfPCell.ALIGN_MIDDLE, catFont, 8));
         header_table.addCell(getCell("DATE", PdfPCell.ALIGN_CENTER, catFont, 8));
-        header_table.addCell(getCell("___________", PdfPCell.ALIGN_RIGHT, catFont, 8));
+        header_table.addCell(getCell(date, PdfPCell.ALIGN_RIGHT, catFont, 8));
         header_table.completeRow();
 
         header_table.addCell(getCell("WELDING PROCESS", PdfPCell.ALIGN_LEFT, catFont, 8));
@@ -326,7 +331,7 @@ public class WPSActivity extends AppCompatActivity {
         document.add(linebreak1);
     }
 
-    public void printJoints_Design(Document document, String alpha, String r, String f) throws DocumentException {      //TODO Add photo as a parameter
+    public void printJoints_Design(Document document, String alpha, String r, String f, String groove) throws DocumentException {      //TODO Add photo as a parameter
         PdfPTable table_title_2 = new PdfPTable(1);
         table_title_2.setWidthPercentage(100);
         table_title_2.addCell(getCell("JOINTS DESIGN", PdfPCell.ALIGN_CENTER, catFont, 20));
@@ -334,14 +339,42 @@ public class WPSActivity extends AppCompatActivity {
 
         PdfPTable table_joints_design = new PdfPTable(2);
         table_joints_design.setWidthPercentage(100);
-        try {
-            table_joints_design.addCell(createImageCell(photo_path));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (groove.equals("Square Joint Groove")) {
+            try {
+                table_joints_design.addCell(createImageCell(photo_path + "square_joint.jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            table_joints_design.completeRow();
+        } else if (groove.equals("Single Bevel Groove")) {
+            try {
+                table_joints_design.addCell(createImageCell(photo_path + "single_bevel.jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            table_joints_design.completeRow();
+        } else if (groove.equals("Double Bevel Groove")) {
+            try {
+                table_joints_design.addCell(createImageCell(photo_path + "double_bevel.jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            table_joints_design.completeRow();
+        } else if (groove.equals("Single V Groove")) {
+            try {
+                table_joints_design.addCell(createImageCell(photo_path + "single_v.jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            table_joints_design.completeRow();
+        } else if (groove.equals("Double V Groove")) {
+            try {
+                table_joints_design.addCell(createImageCell(photo_path + "double_v.jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            table_joints_design.completeRow();
         }
-//        table_joints_design.addCell(getCell("jhhj", PdfPCell.ALIGN_MIDDLE,catFont));
-        table_joints_design.completeRow();
-//
         table_joints_design.addCell(getCell("JOINT TYPE:______Butt Joint", PdfPCell.ALIGN_LEFT, catFont, 8));
         table_joints_design.addCell(getCell("", PdfPCell.ALIGN_MIDDLE, catFont, 8));
         table_joints_design.completeRow();
