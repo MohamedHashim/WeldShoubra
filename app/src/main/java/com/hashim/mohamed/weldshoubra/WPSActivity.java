@@ -580,7 +580,7 @@ public class WPSActivity extends AppCompatActivity {
     }
 
     private Double Heat_Input(Double current, Double voltage, Double travel_speed) {
-        return (voltage * current * 0.9 * 1000) / travel_speed;
+        return (voltage * current * 0.9) / travel_speed;
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
