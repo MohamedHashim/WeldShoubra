@@ -20,8 +20,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -321,47 +319,51 @@ public class ParametersActivity extends AppCompatActivity {
                         groove_txt.setError("You have to select Groove type");
                         Toast.makeText(getApplicationContext(), "You have to select Groove type", Toast.LENGTH_LONG).show();
                     } else {
-                        if (welding_method_index == -1 && area_condition_index == -1) {
-                            smaw = true;
-                            gmaw = true;
-                            gtaw = true;
-                            fcaw = true;
-                            if (thick_num >= 10 && position_index == 0)
+                        if (position_index == -1)
+                            Toast.makeText(getApplicationContext(), "You have to select Position type", Toast.LENGTH_LONG).show();
+                        else {
+                            if (welding_method_index == -1 && area_condition_index == -1) {
+                                smaw = true;
+                                gmaw = true;
+                                gtaw = true;
+                                fcaw = true;
+                                if (thick_num >= 10 && position_index == 0)
+                                    saw = true;
+                            }
+                            if (thick_num >= 10 && position_index == 0 && welding_method_index == 2)
                                 saw = true;
+                            else
+                                saw = false;
+                            if (welding_method_index == 1 && area_condition_index == 1)
+                                gmaw = true;
+                            else
+                                gmaw = false;
+                            if (welding_method_index == 0 && area_condition_index == 1)
+                                gtaw = true;
+                            else
+                                gtaw = false;
+                            if (welding_method_index == 1)
+                                fcaw = true;
+                            else
+                                fcaw = false;
+                            if (welding_method_index == 0)
+                                smaw = true;
+                            else
+                                smaw = false;
+
+
+                            Log.d("bool data", thick_num + "\t" + position_index + "\t" + welding_method_index + "\t" + area_condition_index);
+                            Log.d("bool", saw + "\t" + gmaw + "\t" + gtaw + "\t" + fcaw + "\t" + smaw);
+                            editor.apply();
+
+                            Intent intent = new Intent(ParametersActivity.this, ProcessActivity.class);
+                            intent.putExtra("saw", saw);
+                            intent.putExtra("gmaw", gmaw);
+                            intent.putExtra("gtaw", gtaw);
+                            intent.putExtra("fcaw", fcaw);
+                            intent.putExtra("smaw", smaw);
+                            startActivity(intent);
                         }
-                        if (thick_num >= 10 && position_index == 0 && welding_method_index == 2)
-                            saw = true;
-                        else
-                            saw = false;
-                        if (welding_method_index == 1 && area_condition_index == 1)
-                            gmaw = true;
-                        else
-                            gmaw = false;
-                        if (welding_method_index == 0 && area_condition_index == 1)
-                            gtaw = true;
-                        else
-                            gtaw = false;
-                        if (welding_method_index == 1)
-                            fcaw = true;
-                        else
-                            fcaw = false;
-                        if (welding_method_index == 0)
-                            smaw = true;
-                        else
-                            smaw = false;
-
-
-                        Log.d("bool data", thick_num + "\t" + position_index + "\t" + welding_method_index + "\t" + area_condition_index);
-                        Log.d("bool", saw + "\t" + gmaw + "\t" + gtaw + "\t" + fcaw + "\t" + smaw);
-                        editor.apply();
-
-                        Intent intent = new Intent(ParametersActivity.this, ProcessActivity.class);
-                        intent.putExtra("saw", saw);
-                        intent.putExtra("gmaw", gmaw);
-                        intent.putExtra("gtaw", gtaw);
-                        intent.putExtra("fcaw", fcaw);
-                        intent.putExtra("smaw", smaw);
-                        startActivity(intent);
                     }
                 }
             }
